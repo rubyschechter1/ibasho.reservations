@@ -6,59 +6,93 @@
 <title>Reservations</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#e8ece9;--card:#f6f8f6;--ink:#1c2f2a;--mute:#5d6f69;--line:#c3cdc8;--free:#1f5c4d;--free-bg:#e1efe9;--res:#b9781c;--res-bg:#f6e3c2;--arr:#6b7a85;--arr-bg:#dde3e7;--sel:#2f5fd0;--sel-bg:#dbe5fb;--err:#a8321f;
+:root{--bg:#e8ece9;--card:#f6f8f6;--ink:#1c2f2a;--mute:#5d6f69;--line:#c3cdc8;--free:#1f5c4d;--free-bg:#e1efe9;--sel:#2f5fd0;--sel-bg:#dbe5fb;--err:#a8321f;
+--p0:#b9781c;--p1:#b03a7a;--p2:#7a3fa0;--p3:#8a5a3c;--p4:#a8321f;--p5:#7d7a1e;--s:44px;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#141c1a;--card:#1d2825;--ink:#e6eeea;--mute:#93a59f;--line:#34453f;--free:#6fd0b4;--free-bg:#1b3a32;--res:#e8a84a;--res-bg:#4a3716;--arr:#9fb0bb;--arr-bg:#2b363d;--sel:#7ea3ff;--sel-bg:#1f2f5c;--err:#ff8d78}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#141c1a;--card:#1d2825;--ink:#e6eeea;--mute:#93a59f;--line:#34453f;--free:#6fd0b4;--free-bg:#1b3a32;--res:#e8a84a;--res-bg:#4a3716;--arr:#9fb0bb;--arr-bg:#2b363d;--sel:#7ea3ff;--sel-bg:#1f2f5c;--err:#ff8d78}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#141c1a;--card:#1d2825;--ink:#e6eeea;--mute:#93a59f;--line:#34453f;--free:#6fd0b4;--free-bg:#1b3a32;--sel:#7ea3ff;--sel-bg:#1f2f5c;--err:#ff8d78;--p0:#e8a84a;--p1:#f08ac0;--p2:#c79bf0;--p3:#d4a581;--p4:#ff8d78;--p5:#d6d35a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#141c1a;--card:#1d2825;--ink:#e6eeea;--mute:#93a59f;--line:#34453f;--free:#6fd0b4;--free-bg:#1b3a32;--sel:#7ea3ff;--sel-bg:#1f2f5c;--err:#ff8d78;--p0:#e8a84a;--p1:#f08ac0;--p2:#c79bf0;--p3:#d4a581;--p4:#ff8d78;--p5:#d6d35a}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Instrument Sans",system-ui,sans-serif}
 main{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
-h1,h2{font-family:Fraunces,Georgia,serif;margin:0;font-weight:700}
-h1{font-size:28px}h2{font-size:22px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;margin:0;font-weight:700}
+h1{font-size:28px}h2{font-size:22px}h3{font-size:17px;margin:18px 0 8px}
 header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
-.date{display:flex;gap:6px;align-items:center}
-button,input,select{font:inherit;color:inherit}
+.date{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer;border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 12px}
 button:hover{border-color:var(--free)}
 button.primary{background:var(--free);color:var(--bg);border-color:var(--free);font-weight:600}
+button.danger{color:var(--err)}
 :focus-visible{outline:2px solid var(--sel);outline-offset:2px}
-input,select{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+textarea{resize:vertical}
 .form{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
 .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
 label{display:block;font-size:13px;color:var(--mute);margin-bottom:4px}
 .msg{margin-top:12px;min-height:22px;font-weight:500}
 .msg.ok{color:var(--free)}.msg.bad{color:var(--err)}.msg.hint{color:var(--mute);font-weight:400}
 .panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px}
-@media(max-width:480px){.panels{grid-template-columns:1fr}}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
 .panel.active{border-color:var(--sel)}
 .ph{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 .stats{color:var(--mute);font-size:13px;margin-bottom:14px}
 .stats b{color:var(--ink)}
-.bar{display:flex;gap:8px;justify-content:center;padding:10px;border:1px dashed var(--line);border-radius:40px;margin-bottom:16px}
+.bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;padding:10px;border:1px dashed var(--line);border-radius:40px;margin-bottom:6px}
 .bar-label,.zone{font-size:12px;color:var(--mute);text-align:center;margin:0 0 6px}
-.floor{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.seat,.tbl{border:2px solid var(--free);background:var(--free-bg);color:var(--free);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px;line-height:1.2;font-size:12px;overflow:hidden}
-.seat{width:44px;height:44px;border-radius:50%}
-.tbl{aspect-ratio:1;border-radius:12px}
-.tbl.big{grid-column:1/-1;aspect-ratio:auto;height:78px}
-.tbl b,.seat b{font-size:14px}
-.reserved{border-color:var(--res);background:var(--res-bg);color:var(--res)}
-.arrived{border-color:var(--arr);background:var(--arr-bg);color:var(--arr)}
-.selected{border-color:var(--sel);background:var(--sel-bg);color:var(--sel)}
-.hl{outline:3px solid var(--sel)}
+.floor{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tbl{border:1px solid var(--line);border-radius:14px;padding:8px;background:color-mix(in srgb,var(--bg) 45%,var(--card));display:flex;flex-direction:column;align-items:center;gap:6px}
+.tbl.big{grid-column:1/-1}
+.th{font-size:12px;color:var(--mute)}
+.th b{color:var(--ink);font-size:14px;margin-right:6px}
+.seats{display:grid;gap:6px;justify-content:center}
+.seat{width:var(--s);height:var(--s);border-radius:50%;border:2px solid var(--free);background:var(--free-bg);color:var(--free);padding:0;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;line-height:1}
+.seat.r{border-color:var(--pc);background:color-mix(in srgb,var(--pc) 16%,var(--card));color:var(--pc)}
+.seat.r.a{background:color-mix(in srgb,var(--pc) 50%,var(--card));color:var(--ink)}
+.seat.sel{border-color:var(--sel);background:var(--sel-bg);color:var(--sel)}
+.who{font-size:11px;text-align:center;color:var(--ink);display:flex;gap:4px 10px;flex-wrap:wrap;justify-content:center;min-height:15px}
+.who i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;background:var(--pc)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--mute);margin:16px 0 8px}
-.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;border:2px solid;margin-right:5px;vertical-align:-2px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;border:2px solid;margin-right:5px;vertical-align:-2px}
 .list{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:560px}
-th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:14px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
 th{color:var(--mute);font-weight:500;font-size:13px}
-tr.hl td{background:var(--sel-bg)}
-tr.arrived td{color:var(--arr)}
+tr[data-r]{cursor:pointer}
+tr[data-r]:hover td{background:color-mix(in srgb,var(--sel) 7%,transparent)}
+tr.arrived td{color:var(--mute)}
+td .nt{display:block;max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:var(--pc)}
+td button{padding:5px 9px;font-size:13px}
 .empty{color:var(--mute);padding:8px 0}
-.settings{margin-top:12px;font-size:13px;color:var(--mute);display:flex;gap:8px;align-items:center}
-.settings input{width:auto}
+dialog{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:0;width:min(680px,calc(100vw - 24px));max-height:92vh;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.dh{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:16px 16px 0}
+.sub{color:var(--mute);font-size:13px;margin-top:2px}
+.dbody{padding:4px 16px 18px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.items{display:flex;flex-wrap:wrap;gap:8px}
+.items button{display:flex;gap:6px;align-items:baseline;padding:8px 12px}
+.items small{color:var(--mute)}
+.items .q{background:var(--free);color:var(--bg);border-radius:10px;padding:0 7px;font-size:12px;font-weight:600}
+.cat{margin-bottom:10px}
+.cat p{margin:0 0 6px;font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
+.ol{display:grid;grid-template-columns:1fr auto 70px auto;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}
+.ol .oq{display:flex;align-items:center;gap:6px}
+.ol .oq b{min-width:20px;text-align:center}
+.ol .op{text-align:right}
+.ol button{padding:3px 9px}
+.tot{display:flex;justify-content:space-between;padding:10px 0 2px;font-weight:600}
+.cust{display:grid;grid-template-columns:1fr 100px auto;gap:8px;margin-top:10px}
+.mrow{display:grid;grid-template-columns:1fr 90px 110px auto;gap:8px;margin-bottom:8px}
+@media(max-width:480px){
+:root{--s:38px}
+.panels{grid-template-columns:1fr}
+.floor{grid-template-columns:repeat(2,1fr)}
+.mrow{grid-template-columns:1fr 80px}
+.mrow select{grid-column:1}
+.cust{grid-template-columns:1fr 80px auto}
+}
 </style>
 </head>
 <body>
@@ -67,15 +101,16 @@ tr.arrived td{color:var(--arr)}
   <h1>Reservations</h1>
   <div class="date">
     <button id="prev" aria-label="Previous day">‹</button>
-    <input type="date" id="date" aria-label="Date">
+    <input type="date" id="date" aria-label="Date" style="width:auto">
     <button id="next" aria-label="Next day">›</button>
     <button id="today">Today</button>
+    <button id="menuBtn">Menu</button>
   </div>
 </header>
 
 <section class="form" aria-label="New reservation">
   <div class="fields">
-    <div><label for="party">Guests</label><input id="party" type="number" min="1" max="8" value="2"></div>
+    <div><label for="party">Guests</label><input id="party" type="number" min="1" max="34" value="2"></div>
     <div><label for="slot">Time</label><select id="slot"><option>18:30</option><option>20:30</option></select></div>
     <div><label for="pref">Seating</label><select id="pref"><option value="auto">Best fit</option><option value="table">Table</option><option value="bar">Bar</option></select></div>
     <div><label for="name">Name</label><input id="name" placeholder="Guest name" autocomplete="off"></div>
@@ -83,158 +118,337 @@ tr.arrived td{color:var(--arr)}
     <div><button class="primary" id="book" style="width:100%">Book</button></div>
   </div>
   <div class="msg hint" id="msg" role="status"></div>
-  <div class="settings" style="display:none"><input type="checkbox" id="overlap"><label for="overlap" style="margin:0">A table booked at one time is held for all other times too (one turn per table)</label></div>
 </section>
 
 <div class="panels" id="panels"></div>
 
 <div class="legend">
-  <span><i style="border-color:var(--free);background:var(--free-bg)"></i>Available</span>
-  <span><i style="border-color:var(--res);background:var(--res-bg)"></i>Reserved</span>
-  <span><i style="border-color:var(--arr);background:var(--arr-bg)"></i>Arrived</span>
+  <span><i style="border-color:var(--free);background:var(--free-bg)"></i>Open seat</span>
+  <span><i style="border-color:var(--p0);background:color-mix(in srgb,var(--p0) 16%,var(--card))"></i>Reserved (each party has its own color)</span>
+  <span><i style="border-color:var(--p0);background:color-mix(in srgb,var(--p0) 50%,var(--card))"></i>Arrived (✓)</span>
   <span><i style="border-color:var(--sel);background:var(--sel-bg)"></i>Selected</span>
-  <span>Tip: click open tables or stools to choose them yourself.</span>
+  <span>Tip: click open seats to pick them one by one (several parties can share a table). Click a reserved seat or a booking row to open the party.</span>
 </div>
 
 <section class="list"><h2 style="margin-bottom:8px">Bookings</h2><div id="list"></div></section>
 </main>
 
+<dialog id="pd" aria-labelledby="pdName">
+  <div class="dh">
+    <div><h2 id="pdName"></h2><div class="sub" id="pdSub"></div></div>
+    <button id="pdClose" aria-label="Close">✕</button>
+  </div>
+  <div class="dbody">
+    <div class="row">
+      <button id="pdArr" class="primary"></button>
+      <button id="pdDel" class="danger">Cancel reservation</button>
+    </div>
+    <label for="pdNotes">Notes</label>
+    <textarea id="pdNotes" rows="3" placeholder="Allergies, birthday, seating requests…"></textarea>
+    <h3>Order</h3>
+    <div id="pdOrder"></div>
+    <h3>Add to order</h3>
+    <div id="pdMenu"></div>
+    <div class="cust">
+      <input id="cName" placeholder="Custom item" autocomplete="off" aria-label="Custom item name">
+      <input id="cPrice" type="number" min="0" step="0.01" placeholder="Price" aria-label="Custom item price">
+      <button id="cAdd">Add</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="md" aria-labelledby="mdTitle">
+  <div class="dh">
+    <div><h2 id="mdTitle">Menu</h2><div class="sub">Items here appear as quick-add buttons in every party's order. Changes do not alter orders already placed.</div></div>
+    <button id="mdClose" aria-label="Close">✕</button>
+  </div>
+  <div class="dbody">
+    <div id="mdList" style="margin-top:12px"></div>
+    <h3>Add item</h3>
+    <div class="mrow">
+      <input id="mName" placeholder="Name" autocomplete="off" aria-label="Item name">
+      <input id="mPrice" type="number" min="0" step="0.01" placeholder="Price" aria-label="Item price">
+      <select id="mCat" aria-label="Category"></select>
+      <button class="primary" id="mAdd">Add</button>
+    </div>
+  </div>
+</dialog>
+
 <script>
 const SLOTS=['18:30','20:30'];
-const TABLES=[1,2,3,4,5].map(n=>({id:'T'+n,cap:4,k:'t'})).concat([{id:'T6',cap:8,k:'t'}],[1,2,3,4,5,6].map(n=>({id:'B'+n,cap:1,k:'b'})));
-const TOTAL=34;
-let S={res:[],overlap:false};
-try{const raw=localStorage.getItem('resv-v1');if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
-S.overlap=false;
-const save=()=>{try{localStorage.setItem('resv-v1',JSON.stringify(S))}catch(e){}};
+const TABLES=[1,2,3,4,5].map(n=>({id:'T'+n,cap:4})).concat([{id:'T6',cap:8}]);
+const seatsOf=t=>Array.from({length:t.cap},(_,i)=>t.id+'.'+(i+1));
+const BAR=Array.from({length:6},(_,i)=>'B'+(i+1));
+const TOTAL=TABLES.reduce((a,t)=>a+t.cap,0)+BAR.length;
+const CATS=['Starter','Main','Dessert','Drink','Other'];
+const DEFAULT_MENU=[
+  ['Soup of the day',7,'Starter'],['House salad',8,'Starter'],
+  ['Grilled chicken',18,'Main'],['Pasta',16,'Main'],['Steak',28,'Main'],
+  ['Cheesecake',8,'Dessert'],
+  ['Sparkling water',3,'Drink'],['Glass of wine',7,'Drink'],['Beer',5,'Drink'],['Coffee',3,'Drink']
+];
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+
+let S={res:[],menu:null};
+const migSeats=r=>r.seats||(r.ids||[]).flatMap(id=>id[0]==='T'&&!id.includes('.')?Array.from({length:r.party||1},(_,i)=>id+'.'+(i+1)):[id]);
+(function load(){
+  try{const raw=localStorage.getItem('resv-v2');if(raw){S=Object.assign(S,JSON.parse(raw));return}}catch(e){}
+  try{const old=localStorage.getItem('resv-v1');if(old){const o=JSON.parse(old);S.res=(o.res||[]).map(r=>({...r,seats:migSeats(r),notes:r.notes||'',order:r.order||[],ci:0}))}}catch(e){}
+})();
+if(!Array.isArray(S.res))S.res=[];
+if(!Array.isArray(S.menu)||!S.menu.length&&!localStorage.getItem('resv-v2'))S.menu=DEFAULT_MENU.map(([name,price,cat])=>({id:uid(),name,price,cat}));
+const save=()=>{try{localStorage.setItem('resv-v2',JSON.stringify(S))}catch(e){}};
+save();
+
 const $=id=>document.getElementById(id);
 const iso=d=>{const z=new Date(d.getTime()-d.getTimezoneOffset()*6e4);return z.toISOString().slice(0,10)};
-let date=iso(new Date()),sel=[],selSlot=null,hl=null;
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const money=n=>(+n||0).toFixed(2);
+let date=iso(new Date()),sel=[],selSlot=null,act=null;
 
-const holder=(id,slot)=>S.res.find(r=>r.date===date&&r.ids.includes(id)&&(r.slot===slot||S.overlap));
-const isFree=(id,slot)=>!holder(id,slot);
-const freeIds=(slot,k)=>TABLES.filter(t=>t.k===k&&isFree(t.id,slot)).map(t=>t.id);
+const holder=(sid,slot)=>S.res.find(r=>r.date===date&&r.slot===slot&&r.seats.includes(sid));
+const isFree=(sid,slot)=>!holder(sid,slot);
+const seatName=sid=>sid.includes('.')?sid.replace('.',' seat '):'Bar seat '+sid.slice(1);
+function seatLabel(seats){
+  const g={};
+  seats.forEach(s=>{const p=s.includes('.')?s.split('.'):['Bar',s.slice(1)];(g[p[0]]=g[p[0]]||[]).push(p[1])});
+  return Object.entries(g).map(([t,n])=>t+' · '+n.join(',')).join('; ');
+}
 
 function contiguous(slot,n){
-  const bs=TABLES.filter(t=>t.k==='b').map(t=>t.id);
-  for(let i=0;i+n<=bs.length;i++){const g=bs.slice(i,i+n);if(g.every(id=>isFree(id,slot)))return g}
+  for(let i=0;i+n<=BAR.length;i++){const g=BAR.slice(i,i+n);if(g.every(id=>isFree(id,slot)))return g}
   return null;
 }
 function bestFit(slot,party,pref){
   if(party<1||party>8)return null;
-  const fours=freeIds(slot,'t').filter(id=>id!=='T6'),eight=isFree('T6',slot)?['T6']:[];
   const bar=party<=6?contiguous(slot,party):null;
   if(pref==='bar')return bar;
-  let order;
-  if(party>=5)order=[eight];
-  else if(party>=3)order=[fours.slice(0,1),eight];
-  else order=pref==='table'?[fours.slice(0,1),eight]:[fours.slice(0,1),bar,eight];
-  for(const o of order)if(o&&o.length)return o;
+  let empty=null,part=null;
+  for(const t of TABLES){
+    const free=seatsOf(t).filter(s=>isFree(s,slot));
+    if(free.length<party)continue;
+    const cand={seats:free.slice(0,party),waste:free.length-party};
+    if(free.length===t.cap){if(!empty||cand.waste<empty.waste)empty=cand}
+    else if(!part||cand.waste<part.waste)part=cand;
+  }
+  const order=pref==='table'?[empty,part]:party<=2?[empty,bar,part]:[empty,part,bar];
+  for(const o of order){const s=o&&(o.seats||o);if(s&&s.length)return s}
   return null;
 }
-function validate(ids,party){
-  const tb=ids.filter(i=>i[0]==='T'),br=ids.filter(i=>i[0]==='B');
-  if(tb.length&&br.length)return'Choose either a table or bar seats, not both.';
-  if(tb.length>1)return'Choose one table.';
-  if(tb.length){const t=TABLES.find(x=>x.id===tb[0]);if(party>t.cap)return`${t.id} seats ${t.cap}. Pick a larger table.`}
-  if(br.length&&br.length!==party)return`Select ${party} bar seat${party>1?'s':''} (you picked ${br.length}).`;
+function validate(seats,party){
+  if(seats.length!==party)return`Select ${party} seat${party>1?'s':''} (you picked ${seats.length}).`;
   return null;
 }
 function say(t,c){const m=$('msg');m.textContent=t;m.className='msg '+(c||'hint')}
 
 function preview(){
   const party=+$('party').value||0,slot=$('slot').value,pref=$('pref').value;
-  if(sel.length)return;
   if(party<1)return say('Enter the number of guests.','bad');
-  if(party>8)return say('Parties over 8 need a split booking or a call to the restaurant.','bad');
+  if(party>8)return say('For parties over 8, click the seats you want, then Book.','hint');
   const f=bestFit(slot,party,pref);
-  if(f)return say(`${slot}: ${party} guest${party>1?'s':''} fit at ${f.length>1?'bar seats '+f.join(', '):f[0]}.`,'hint');
+  if(f)return say(`${slot}: ${party} guest${party>1?'s':''} fit at ${seatLabel(f)}.`,'hint');
   const alt=SLOTS.filter(s=>s!==slot&&bestFit(s,party,pref));
   say(`No availability at ${slot} for ${party}.`+(alt.length?` Open at ${alt.join(', ')}.`:' Nothing open at the other seating either.'),'bad');
+}
+function status(){
+  if(!sel.length)return preview();
+  const err=validate(sel,+$('party').value||0);
+  say(err||`Selected ${seatLabel(sel)} at ${selSlot}. Add a name and book.`,err?'bad':'ok');
 }
 
 function book(){
   const party=+$('party').value,slot=$('slot').value,pref=$('pref').value,name=$('name').value.trim();
   if(!name)return say('Add a guest name.','bad');
-  if(!(party>=1&&party<=8))return say('Guests must be between 1 and 8.','bad');
-  let ids;
+  if(!(party>=1&&party<=TOTAL))return say(`Guests must be between 1 and ${TOTAL}.`,'bad');
+  let seats;
   if(sel.length){
     if(selSlot!==slot)return say(`Your selection is for ${selSlot}. Change the time or reselect.`,'bad');
     const err=validate(sel,party);if(err)return say(err,'bad');
-    ids=sel.slice();
-  }else ids=bestFit(slot,party,pref);
-  if(!ids)return preview();
-  if(ids.some(id=>!isFree(id,slot)))return say('That spot was just taken.','bad');
-  S.res.push({id:Date.now()+''+Math.random().toString(36).slice(2,5),date,slot,name,phone:$('phone').value.trim(),party,ids,arrived:false});
+    seats=sel.slice();
+  }else seats=bestFit(slot,party,pref);
+  if(!seats)return preview();
+  if(seats.some(s=>!isFree(s,slot)))return say('That spot was just taken.','bad');
+  const used=S.res.filter(r=>r.date===date&&r.slot===slot).map(r=>r.ci);
+  let ci=0;while(used.includes(ci)&&ci<5)ci++;
+  if(used.includes(ci))ci=used.length%6;
+  S.res.push({id:uid(),date,slot,name,phone:$('phone').value.trim(),party,seats,arrived:false,notes:'',order:[],ci});
   save();sel=[];selSlot=null;
   $('name').value='';$('phone').value='';
-  render();say(`Booked ${name}, ${party} at ${slot} (${ids.join(', ')}).`,'ok');
+  render();say(`Booked ${name}, ${party} at ${slot} (${seatLabel(seats)}).`,'ok');
 }
 
-function pick(id,slot){
-  if(!isFree(id,slot))return;
+function pick(sid,slot){
+  if(!isFree(sid,slot))return;
   if(selSlot!==slot){sel=[];selSlot=slot}
   $('slot').value=slot;
-  if(id[0]==='T')sel=sel.includes(id)?[]:[id];
-  else{sel=sel.filter(i=>i[0]==='B');sel=sel.includes(id)?sel.filter(i=>i!==id):sel.concat(id)}
-  if(!sel.length)selSlot=null;
-  else{const tb=sel.find(i=>i[0]==='T');$('party').value=tb?Math.min(+$('party').value||1,TABLES.find(t=>t.id===tb).cap):sel.length}
-  render();
-  if(sel.length){const err=validate(sel,+$('party').value);say(err||`Selected ${sel.join(', ')} at ${slot}. Add a name and book.`,err?'bad':'ok')}else preview();
+  sel=sel.includes(sid)?sel.filter(i=>i!==sid):sel.concat(sid);
+  if(!sel.length)selSlot=null;else $('party').value=sel.length;
+  render();status();
 }
 
-function cell(t,slot){
-  const r=holder(t.id,slot),isSel=selSlot===slot&&sel.includes(t.id);
-  const cls=(t.k==='b'?'seat':'tbl')+(t.id==='T6'?' big':'')+(r?(r.arrived?' arrived':' reserved'):isSel?' selected':'')+(r&&r.id===hl?' hl':'');
-  const held=r&&r.slot!==slot;
-  const body=r?`<b>${t.id}</b>${t.k==='b'?'':`<span>${esc(r.name)}</span><span>${held?'held · ':''}party of ${r.party}</span>`}`:`<b>${t.id}</b>${t.k==='b'?'':`<span>${t.cap} seats</span>`}`;
-  const title=r?`${r.name}, ${r.party} at ${r.slot}`:`${t.id}, ${t.cap===1?'bar seat':t.cap+' seats'}, available`;
-  return `<button class="${cls}" data-id="${t.id}" data-slot="${slot}" title="${esc(title)}" aria-label="${esc(title)}">${body}</button>`;
+function seatBtn(sid,slot){
+  const r=holder(sid,slot),on=selSlot===slot&&sel.includes(sid);
+  const num=sid.includes('.')?sid.split('.')[1]:sid.slice(1);
+  let cls='seat',st='',txt=num,title=seatName(sid)+', open';
+  if(r){
+    cls+=' r'+(r.arrived?' a':'');
+    st=` style="--pc:var(--p${(r.ci||0)%6})"`;
+    txt=r.arrived?'✓':esc(Array.from(r.name.trim())[0]||'?').toUpperCase();
+    title=`${seatName(sid)}: ${r.name}, party of ${r.party}${r.arrived?' (arrived)':''}`;
+  }else if(on){cls+=' sel';title=seatName(sid)+', selected'}
+  return `<button class="${cls}"${st} data-id="${sid}" data-slot="${slot}" title="${esc(title)}" aria-label="${esc(title)}"${r?'':` aria-pressed="${on}"`}>${txt}</button>`;
+}
+function who(ids,slot){
+  const rs=[...new Set(ids.map(s=>holder(s,slot)).filter(Boolean))];
+  return `<div class="who">${rs.map(r=>`<span style="--pc:var(--p${(r.ci||0)%6})"><i></i>${esc(r.name)} ×${r.seats.filter(s=>ids.includes(s)).length}</span>`).join('')}</div>`;
+}
+function tableCard(t,slot){
+  const ss=seatsOf(t),cols=t.cap>4?4:2;
+  return `<div class="tbl${t.cap>4?' big':''}"><div class="th"><b>${t.id}</b>${t.cap} seats</div><div class="seats" style="grid-template-columns:repeat(${cols},var(--s))">${ss.map(s=>seatBtn(s,slot)).join('')}</div>${who(ss,slot)}</div>`;
 }
 function panel(slot){
-  const taken=new Set();S.res.filter(r=>r.date===date&&r.slot===slot).forEach(r=>taken.add(r));
-  const covers=[...taken].reduce((a,r)=>a+r.party,0);
-  const f4=freeIds(slot,'t').filter(i=>i!=='T6').length,f8=isFree('T6',slot),fb=freeIds(slot,'b').length;
-  const seatsFree=(f4*4)+(f8?8:0)+fb;
-  return `<div class="panel ${$('slot').value===slot?'active':''}"><div class="ph"><h2>${slot}</h2><span class="stats"><b>${covers}</b> guests booked</span></div>
-  <div class="stats"><b>${f4}/5</b> four-tops free · eight-top <b>${f8?'free':'taken'}</b> · bar <b>${fb}/6</b> · <b>${seatsFree}/${TOTAL}</b> seats open</div>
-  <p class="bar-label">Bar</p><div class="bar">${TABLES.filter(t=>t.k==='b').map(t=>cell(t,slot)).join('')}</div>
-  <p class="zone">Dining room</p><div class="floor">${TABLES.filter(t=>t.k==='t'&&t.id!=='T6').map(t=>cell(t,slot)).join('')}${cell(TABLES.find(t=>t.id==='T6'),slot)}</div></div>`;
+  const rs=S.res.filter(r=>r.date===date&&r.slot===slot);
+  const guests=rs.reduce((a,r)=>a+r.party,0);
+  const taken=new Set(rs.flatMap(r=>r.seats)).size;
+  return `<div class="panel ${$('slot').value===slot?'active':''}"><div class="ph"><h2>${slot}</h2><span class="stats"><b>${rs.length}</b> part${rs.length===1?'y':'ies'} · <b>${guests}</b> guests booked</span></div>
+  <div class="stats"><b>${TOTAL-taken}/${TOTAL}</b> seats open</div>
+  <p class="bar-label">Bar</p><div class="bar">${BAR.map(s=>seatBtn(s,slot)).join('')}</div>${who(BAR,slot)}
+  <p class="zone" style="margin-top:14px">Dining room</p><div class="floor">${TABLES.map(t=>tableCard(t,slot)).join('')}</div></div>`;
 }
+
+const orderTotal=r=>(r.order||[]).reduce((a,l)=>a+l.price*l.qty,0);
+const orderCount=r=>(r.order||[]).reduce((a,l)=>a+l.qty,0);
 function list(){
   const rows=S.res.filter(r=>r.date===date).sort((a,b)=>a.slot.localeCompare(b.slot)||a.name.localeCompare(b.name));
   if(!rows.length)return $('list').innerHTML='<div class="empty">No bookings for this date yet. Enter guests and a time above.</div>';
-  $('list').innerHTML=`<table><thead><tr><th>Time</th><th>Name</th><th>Guests</th><th>Seats</th><th>Phone</th><th></th></tr></thead><tbody>`+rows.map(r=>`<tr data-r="${r.id}" class="${r.arrived?'arrived':''}${r.id===hl?' hl':''}"><td>${r.slot}</td><td>${esc(r.name)}</td><td>${r.party}</td><td>${r.ids.join(', ')}</td><td>${esc(r.phone||'')}</td><td><button data-act="arr" data-id="${r.id}">${r.arrived?'Undo arrived':'Arrived'}</button> <button data-act="del" data-id="${r.id}">Cancel</button></td></tr>`).join('')+`</tbody></table>`;
+  $('list').innerHTML=`<table><thead><tr><th>Time</th><th>Name</th><th>Guests</th><th>Seats</th><th>Order</th><th>Notes</th><th></th></tr></thead><tbody>`+rows.map(r=>{
+    const n=orderCount(r);
+    return `<tr data-r="${r.id}" class="${r.arrived?'arrived':''}" style="--pc:var(--p${(r.ci||0)%6})"><td>${r.slot}</td><td><span class="dot"></span>${esc(r.name)}${r.arrived?' ✓':''}${r.phone?`<div class="sub">${esc(r.phone)}</div>`:''}</td><td>${r.party}</td><td>${esc(seatLabel(r.seats))}</td><td>${n?`${n} item${n>1?'s':''} · ${money(orderTotal(r))}`:'—'}</td><td><span class="nt">${esc(r.notes||'')}</span></td><td style="white-space:nowrap"><button data-act="arr" data-id="${r.id}">${r.arrived?'Undo arrived':'Arrived'}</button> <button data-act="open" data-id="${r.id}">Order / notes</button> <button data-act="del" data-id="${r.id}">Cancel</button></td></tr>`;
+  }).join('')+`</tbody></table>`;
 }
 function render(){
-  $('date').value=date;$('overlap').checked=S.overlap;
+  $('date').value=date;
   $('panels').innerHTML=SLOTS.map(panel).join('');
   list();
 }
 
-$('panels').addEventListener('click',e=>{
+/* ---------- party dialog ---------- */
+const cur=()=>S.res.find(r=>r.id===act);
+function pdRender(){
+  const r=cur();if(!r)return;
+  $('pdName').textContent=r.name;
+  $('pdSub').textContent=`Party of ${r.party} · ${r.date} ${r.slot} · ${seatLabel(r.seats)}${r.phone?' · '+r.phone:''}`;
+  $('pdArr').textContent=r.arrived?'Arrived ✓ (tap to undo)':'Mark arrived';
+  const o=r.order||[];
+  $('pdOrder').innerHTML=o.length
+    ?o.map((l,i)=>`<div class="ol"><span>${esc(l.name)}</span><span class="oq"><button data-act="dec" data-k="${i}" aria-label="One less ${esc(l.name)}">−</button><b>${l.qty}</b><button data-act="inc" data-k="${i}" aria-label="One more ${esc(l.name)}">+</button></span><span class="op">${money(l.price*l.qty)}</span><button data-act="rm" data-k="${i}" aria-label="Remove ${esc(l.name)}">✕</button></div>`).join('')
+      +`<div class="tot"><span>Total (${orderCount(r)} item${orderCount(r)>1?'s':''})</span><span>${money(orderTotal(r))}</span></div><button data-act="clear" class="danger" style="margin-top:6px">Clear order</button>`
+    :'<div class="empty">Nothing ordered yet. Tap items below to add them.</div>';
+  const qty=id=>(o.find(l=>l.mid===id)||{}).qty||0;
+  const groups=CATS.map(c=>[c,S.menu.filter(m=>m.cat===c)]).filter(g=>g[1].length);
+  $('pdMenu').innerHTML=groups.length?groups.map(([c,ms])=>`<div class="cat"><p>${c}</p><div class="items">${ms.map(m=>`<button data-mid="${m.id}">${esc(m.name)} <small>${money(m.price)}</small>${qty(m.id)?`<span class="q">×${qty(m.id)}</span>`:''}</button>`).join('')}</div></div>`).join(''):'<div class="empty">The menu is empty. Add items with the Menu button at the top of the page.</div>';
+}
+function openParty(id){
+  act=id;const r=cur();if(!r)return;
+  $('pdNotes').value=r.notes||'';
+  $('cName').value='';$('cPrice').value='';
+  pdRender();
+  if(!$('pd').open)$('pd').showModal();
+}
+function addLine(mid,name,price){
+  const r=cur();if(!r)return;
+  r.order=r.order||[];
+  const l=r.order.find(x=>mid?x.mid===mid:(!x.mid&&x.name.toLowerCase()===name.toLowerCase()&&x.price===price));
+  if(l)l.qty++;else r.order.push({mid:mid||null,name,price,qty:1});
+  save();pdRender();list();
+}
+$('pdMenu').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-mid]');if(!b)return;
+  const m=S.menu.find(x=>x.id===b.dataset.mid);if(m)addLine(m.id,m.name,m.price);
+});
+$('cAdd').onclick=()=>{
+  const n=$('cName').value.trim();if(!n)return;
+  addLine(null,n,parseFloat($('cPrice').value)||0);
+  $('cName').value='';$('cPrice').value='';
+};
+$('cName').addEventListener('keydown',e=>{if(e.key==='Enter')$('cAdd').click()});
+$('pdOrder').addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
-  const slot=b.dataset.slot,id=b.dataset.id,r=holder(id,slot);
-  if(r){hl=r.id;render();const row=document.querySelector(`tr[data-r="${r.id}"]`);if(row)row.scrollIntoView({block:'center',behavior:'smooth'})}
-  else pick(id,slot);
+  const r=cur();if(!r)return;
+  const k=+b.dataset.k;
+  if(b.dataset.act==='inc')r.order[k].qty++;
+  else if(b.dataset.act==='dec'){r.order[k].qty--;if(r.order[k].qty<1)r.order.splice(k,1)}
+  else if(b.dataset.act==='rm')r.order.splice(k,1);
+  else if(b.dataset.act==='clear'){if(!confirm('Clear the whole order?'))return;r.order=[]}
+  save();pdRender();list();
+});
+$('pdNotes').addEventListener('input',e=>{const r=cur();if(!r)return;r.notes=e.target.value;save();list()});
+$('pdArr').onclick=()=>{const r=cur();if(!r)return;r.arrived=!r.arrived;save();pdRender();render()};
+$('pdDel').onclick=()=>{
+  const r=cur();if(!r)return;
+  if(!confirm(`Cancel ${r.name} (${r.party} at ${r.slot})?`))return;
+  S.res=S.res.filter(x=>x!==r);save();$('pd').close();render();status();
+};
+$('pdClose').onclick=()=>$('pd').close();
+$('pd').addEventListener('click',e=>{if(e.target===$('pd'))$('pd').close()});
+$('pd').addEventListener('close',()=>{act=null;render()});
+
+/* ---------- menu dialog ---------- */
+$('mCat').innerHTML=CATS.map(c=>`<option>${c}</option>`).join('');
+function mdRender(){
+  $('mdList').innerHTML=S.menu.length?S.menu.map(m=>`<div class="mrow" data-id="${m.id}"><input data-f="name" value="${esc(m.name)}" aria-label="Name"><input data-f="price" type="number" min="0" step="0.01" value="${m.price}" aria-label="Price"><select data-f="cat" aria-label="Category">${CATS.map(c=>`<option${c===m.cat?' selected':''}>${c}</option>`).join('')}</select><button data-act="mdel" class="danger" aria-label="Delete ${esc(m.name)}">✕</button></div>`).join(''):'<div class="empty">No items yet.</div>';
+}
+$('menuBtn').onclick=()=>{mdRender();$('md').showModal()};
+$('mdClose').onclick=()=>$('md').close();
+$('md').addEventListener('click',e=>{if(e.target===$('md'))$('md').close()});
+$('mdList').addEventListener('change',e=>{
+  const row=e.target.closest('.mrow'),f=e.target.dataset.f;if(!row||!f)return;
+  const m=S.menu.find(x=>x.id===row.dataset.id);if(!m)return;
+  if(f==='price')m.price=parseFloat(e.target.value)||0;
+  else if(f==='name'){const v=e.target.value.trim();if(v)m.name=v;else e.target.value=m.name}
+  else m.cat=e.target.value;
+  save();
+});
+$('mdList').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-act="mdel"]');if(!b)return;
+  const id=b.closest('.mrow').dataset.id;
+  S.menu=S.menu.filter(m=>m.id!==id);save();mdRender();
+});
+function addMenu(){
+  const n=$('mName').value.trim();if(!n)return;
+  S.menu.push({id:uid(),name:n,price:parseFloat($('mPrice').value)||0,cat:$('mCat').value});
+  $('mName').value='';$('mPrice').value='';save();mdRender();$('mName').focus();
+}
+$('mAdd').onclick=addMenu;
+$('mName').addEventListener('keydown',e=>{if(e.key==='Enter')addMenu()});
+
+/* ---------- main page events ---------- */
+$('panels').addEventListener('click',e=>{
+  const b=e.target.closest('.seat');if(!b)return;
+  const r=holder(b.dataset.id,b.dataset.slot);
+  if(r)openParty(r.id);else pick(b.dataset.id,b.dataset.slot);
 });
 $('list').addEventListener('click',e=>{
-  const b=e.target.closest('button');if(!b)return;
-  const r=S.res.find(x=>x.id===b.dataset.id);if(!r)return;
-  if(b.dataset.act==='arr')r.arrived=!r.arrived;
-  else{if(!confirm(`Cancel ${r.name} (${r.party} at ${r.slot})?`))return;S.res=S.res.filter(x=>x!==r)}
-  save();render();preview();
+  const tr=e.target.closest('tr[data-r]');if(!tr)return;
+  const b=e.target.closest('button');
+  const r=S.res.find(x=>x.id===tr.dataset.r);if(!r)return;
+  if(!b||b.dataset.act==='open')return openParty(r.id);
+  if(b.dataset.act==='arr'){r.arrived=!r.arrived}
+  else if(b.dataset.act==='del'){if(!confirm(`Cancel ${r.name} (${r.party} at ${r.slot})?`))return;S.res=S.res.filter(x=>x!==r)}
+  save();render();status();
 });
-const shift=n=>{const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+n);date=iso(d);sel=[];selSlot=null;render();preview()};
+const reset=()=>{sel=[];selSlot=null};
+const shift=n=>{const d=new Date(date+'T12:00:00');d.setDate(d.getDate()+n);date=iso(d);reset();render();status()};
 $('prev').onclick=()=>shift(-1);$('next').onclick=()=>shift(1);
-$('today').onclick=()=>{date=iso(new Date());sel=[];selSlot=null;render();preview()};
-$('date').onchange=e=>{if(e.target.value){date=e.target.value;sel=[];selSlot=null;render();preview()}};
-$('overlap').onchange=e=>{S.overlap=e.target.checked;save();render();preview()};
-['party','slot','pref'].forEach(id=>$(id).addEventListener('input',()=>{if(id!=='party'&&sel.length&&selSlot!==$('slot').value){sel=[];selSlot=null}sel.length?0:0;render();preview()}));
+$('today').onclick=()=>{date=iso(new Date());reset();render();status()};
+$('date').onchange=e=>{if(e.target.value){date=e.target.value;reset();render();status()}};
+['party','slot','pref'].forEach(id=>$(id).addEventListener('input',()=>{
+  if(id==='slot'&&sel.length&&selSlot!==$('slot').value)reset();
+  render();status();
+}));
 $('book').onclick=book;
 $('name').addEventListener('keydown',e=>{if(e.key==='Enter')book()});
-render();preview();
+render();status();
 </script>
 </body>
 </html>
